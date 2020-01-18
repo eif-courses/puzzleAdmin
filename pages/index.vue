@@ -205,7 +205,7 @@ export default {
       () => {
         this.uploadValue1 = 100
         storageRef.snapshot.ref.getDownloadURL().then((url) => {
-          this.picture = url
+          this.picture1 = url
         })
       }
       )
@@ -219,7 +219,7 @@ export default {
       () => {
         this.uploadValue2 = 100
         storageRef.snapshot.ref.getDownloadURL().then((url) => {
-          this.picture = url
+          this.picture2 = url
         })
       }
       )
@@ -233,7 +233,7 @@ export default {
       () => {
         this.uploadValue3 = 100
         storageRef.snapshot.ref.getDownloadURL().then((url) => {
-          this.picture = url
+          this.picture3 = url
         })
       }
       )
@@ -247,7 +247,7 @@ export default {
       () => {
         this.uploadValue4 = 100
         storageRef.snapshot.ref.getDownloadURL().then((url) => {
-          this.picture = url
+          this.picture4 = url
         })
       }
       )
@@ -261,7 +261,7 @@ export default {
       () => {
         this.uploadValue5 = 100
         storageRef.snapshot.ref.getDownloadURL().then((url) => {
-          this.picture = url
+          this.picture5 = url
         })
       }
       )
