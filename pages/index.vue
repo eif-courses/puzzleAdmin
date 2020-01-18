@@ -2,13 +2,9 @@
   <div>
     <div v-if="authenticatedUser">
       <p>You are logged in as {{ authenticatedUser.email }}.</p>
-      <p>Logout?</p>
-      <button @click.prevent="logout">
+      <v-btn @click.prevent="logout">
         Logout
-      </button>
-      <button @click.prevent="writeToFirestore">
-        SAVE TO FIRESTORE
-      </button>
+      </v-btn>
     </div>
     <div v-else>
       <input id="hasAccount" :value="false" v-model="needsAccount" type="radio">
@@ -29,102 +25,203 @@
       </form>
     </div>
 
-    <div>
-      <div>
-        <p>Upload an image to Firebase:</p>
-        <input @change="previewImage1" type="file" accept="image/*">
-      </div>
-      <div>
-        <p>
-          Progress: {{ uploadValue1.toFixed()+"%" }}
-          <progress id="progress" :value="uploadValue1" max="100" />
-        </p>
-      </div>
-      <div v-if="imageData1!=null">
-        <img :src="picture1" class="preview">
-        <br>
-        <button @click="onUpload1">
-          Upload
-        </button>
-      </div>
-      <div>
-        <div>
-          <p>Upload an image to Firebase:</p>
-          <input @change="previewImage2" type="file" accept="image/*">
-        </div>
-        <div>
-          <p>
-            Progress: {{ uploadValue2.toFixed()+"%" }}
-            <progress id="progress" :value="uploadValue2" max="100" />
-          </p>
-        </div>
-        <div v-if="imageData2!=null">
-          <img :src="picture2" class="preview">
-          <br>
-          <button @click="onUpload2">
-            Upload
-          </button>
-        </div>
-      </div>
+    <v-container class="grey lighten-5">
+      <v-text-field v-model="category" label="Category" />
+      <v-text-field v-model="question" label="Question" />
+      <v-text-field v-model="levelname" label="Level name" />
+      <v-text-field v-model="categorylt" label="Nurodykite kategoriją" />
+      <v-text-field v-model="questionlt" label="Pateikite klausimą arba teiginį" />
+      <v-text-field v-model="levelnamelt" label="Pateikite pavadinimą" />
+      <v-row no-gutters>
+        <v-col>
+          <v-card
+            class="pa-2"
+            outlined
+            tile
+          >
+            <div>
+              <p>Upload an image to Firebase:</p>
+              <input @change="previewImage1" type="file" accept="image/*">
+            </div>
+            <div>
+              <p>
+                Progress: {{ uploadValue1.toFixed()+"%" }}
+                <progress id="progress" :value="uploadValue1" max="100" />
+              </p>
+            </div>
+            <div v-if="imageData1!=null">
+              <img :src="picture1" class="preview">
+              <br>
+              <v-btn @click="onUpload1" class="ma-2" tile color="indigo" dark>
+                Upload
+              </v-btn>
+            </div>
+          </v-card>
+        </v-col>
+        <v-col order="12">
+          <v-card
+            class="pa-2"
+            outlined
+            tile
+          >
+            <div>
+              <div>
+                <p>Upload an image to Firebase:</p>
+                <input @change="previewImage2" type="file" accept="image/*">
+              </div>
+              <div>
+                <p>
+                  Progress: {{ uploadValue2.toFixed()+"%" }}
+                  <progress id="progress" :value="uploadValue2" max="100" />
+                </p>
+              </div>
+              <div v-if="imageData2!=null">
+                <img :src="picture2" class="preview">
+                <br>
+                <v-btn @click="onUpload2" class="ma-2" tile color="indigo" dark>
+                  Upload
+                </v-btn>
+              </div>
+            </div>
+          </v-card>
+        </v-col>
+        <v-col order="1">
+          <v-card
+            class="pa-2"
+            outlined
+            tile
+          >
+            <div>
+              <div>
+                <p>Upload an image to Firebase:</p>
+                <input @change="previewImage3" type="file" accept="image/*">
+              </div>
+              <div>
+                <p>
+                  Progress: {{ uploadValue3.toFixed()+"%" }}
+                  <progress id="progress" :value="uploadValue3" max="100" />
+                </p>
+              </div>
+              <div v-if="imageData3!=null">
+                <img :src="picture3" class="preview">
+                <br>
+                <v-btn @click="onUpload3" class="ma-2" tile color="indigo" dark>
+                  Upload
+                </v-btn>
+              </div>
+            </div>
+          </v-card>
+        </v-col>
 
-      <div>
-        <div>
-          <p>Upload an image to Firebase:</p>
-          <input @change="previewImage3" type="file" accept="image/*">
-        </div>
-        <div>
-          <p>
-            Progress: {{ uploadValue3.toFixed()+"%" }}
-            <progress id="progress" :value="uploadValue3" max="100" />
-          </p>
-        </div>
-        <div v-if="imageData3!=null">
-          <img :src="picture3" class="preview">
-          <br>
-          <button @click="onUpload3">
-            Upload
-          </button>
-        </div>
-      </div>
-      <div>
-        <div>
-          <p>Upload an image to Firebase:</p>
-          <input @change="previewImage4" type="file" accept="image/*">
-        </div>
-        <div>
-          <p>
-            Progress: {{ uploadValue4.toFixed()+"%" }}
-            <progress id="progress" :value="uploadValue4" max="100" />
-          </p>
-        </div>
-        <div v-if="imageData4!=null">
-          <img :src="picture4" class="preview">
-          <br>
-          <button @click="onUpload4">
-            Upload
-          </button>
-        </div>
-      </div>
-      <div>
-        <div>
-          <p>Upload an image to Firebase:</p>
-          <input @change="previewImage5" type="file" accept="image/*">
-        </div>
-        <div>
-          <p>
-            Progress: {{ uploadValue5.toFixed()+"%" }}
-            <progress id="progress" :value="uploadValue5" max="100" />
-          </p>
-        </div>
-        <div v-if="imageData5!=null">
-          <img :src="picture5" class="preview">
-          <br>
-          <button @click="onUpload5">
-            Upload
-          </button>
-        </div>
-      </div>
-    </div>
+        <v-col order="1">
+          <v-card
+            class="pa-2"
+            outlined
+            tile
+          >
+            <div>
+              <div>
+                <p>Upload an image to Firebase:</p>
+                <input @change="previewImage4" type="file" accept="image/*">
+              </div>
+              <div>
+                <p>
+                  Progress: {{ uploadValue4.toFixed()+"%" }}
+                  <progress id="progress" :value="uploadValue4" max="100" />
+                </p>
+              </div>
+              <div v-if="imageData4!=null">
+                <img :src="picture4" class="preview">
+                <br>
+                <v-btn @click="onUpload4" class="ma-2" tile color="indigo" dark>
+                  Upload
+                </v-btn>
+              </div>
+            </div>
+          </v-card>
+        </v-col>
+
+        <v-col order="1">
+          <v-card
+            class="pa-2"
+            outlined
+            tile
+          >
+            <div>
+              <div>
+                <p>Upload an image to Firebase:</p>
+                <input @change="previewImage5" type="file" accept="image/*">
+              </div>
+              <div>
+                <p>
+                  Progress: {{ uploadValue5.toFixed()+"%" }}
+                  <progress id="progress" :value="uploadValue5" max="100" />
+                </p>
+              </div>
+              <div v-if="imageData5!=null">
+                <img :src="picture5" class="preview">
+                <br>
+                <v-btn @click="onUpload5" class="ma-2" tile color="indigo" dark>
+                  Upload
+                </v-btn>
+              </div>
+            </div>
+          </v-card>
+        </v-col>
+
+        <v-col order="6">
+          <v-card
+            class="pa-2"
+            outlined
+            tile
+          >
+            <div>
+              <div>
+                <p><strong>Kategorijos antraštinis paveikslėlis:</strong></p>
+                <input @change="previewImage6" type="file" accept="image/*">
+              </div>
+              <div>
+                <p>
+                  Progress: {{ uploadValue6.toFixed()+"%" }}
+                  <progress id="progress" :value="uploadValue6" max="100" />
+                </p>
+              </div>
+              <div v-if="imageData6!=null">
+                <img :src="picture6" class="preview">
+                <br>
+                <v-btn @click="onUpload6" class="ma-2" tile color="indigo" dark>
+                  Upload
+                </v-btn>
+              </div>
+            </div>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <v-btn
+      @click.prevent="writeToFirestore"
+      v-if="!alert"
+      @click="alert = true"
+      class="ma-2"
+      tile
+      color="green"
+      dark
+    >
+      SAVE TO FIRESTORE
+    </v-btn>
+
+    <v-alert
+      v-model="alert"
+      dismissible
+      color="cyan"
+      border="left"
+      elevation="2"
+      colored-border
+      icon="mdi-twitter"
+    >
+      <strong>{{ this.success }}</strong>
+    </v-alert>
   </div>
 </template>
 
@@ -149,7 +246,18 @@ export default {
       uploadValue4: 0,
       imageData5: null,
       picture5: null,
-      uploadValue5: 0
+      uploadValue5: 0,
+      imageData6: null,
+      picture6: null,
+      uploadValue6: 0,
+      category: '',
+      question: '',
+      levelname: '',
+      categorylt: '',
+      questionlt: '',
+      levelnamelt: '',
+      success: 'Lygis sėkmingai įkeltas į duombazę!',
+      alert: false
     }
   },
   firestore () {
@@ -196,12 +304,19 @@ export default {
       this.picture5 = null
       this.imageData5 = event.target.files[0]
     },
+    previewImage6 (event) {
+      this.uploadValue6 = 0
+      this.picture6 = null
+      this.imageData6 = event.target.files[0]
+    },
     onUpload1 () {
       this.picture1 = null
       const storageRef = firebase.storage().ref(`${this.imageData1.name}`).put(this.imageData1)
       storageRef.on(`state_changed`, (snapshot) => {
         this.uploadValue1 = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-      }, (error) => { console.log(error.message) },
+      }, (error) => {
+        console.log(error.message)
+      },
       () => {
         this.uploadValue1 = 100
         storageRef.snapshot.ref.getDownloadURL().then((url) => {
@@ -215,7 +330,9 @@ export default {
       const storageRef = firebase.storage().ref(`${this.imageData2.name}`).put(this.imageData2)
       storageRef.on(`state_changed`, (snapshot) => {
         this.uploadValue2 = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-      }, (error) => { console.log(error.message) },
+      }, (error) => {
+        console.log(error.message)
+      },
       () => {
         this.uploadValue2 = 100
         storageRef.snapshot.ref.getDownloadURL().then((url) => {
@@ -229,7 +346,9 @@ export default {
       const storageRef = firebase.storage().ref(`${this.imageData3.name}`).put(this.imageData3)
       storageRef.on(`state_changed`, (snapshot) => {
         this.uploadValue3 = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-      }, (error) => { console.log(error.message) },
+      }, (error) => {
+        console.log(error.message)
+      },
       () => {
         this.uploadValue3 = 100
         storageRef.snapshot.ref.getDownloadURL().then((url) => {
@@ -243,7 +362,9 @@ export default {
       const storageRef = firebase.storage().ref(`${this.imageData4.name}`).put(this.imageData4)
       storageRef.on(`state_changed`, (snapshot) => {
         this.uploadValue4 = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-      }, (error) => { console.log(error.message) },
+      }, (error) => {
+        console.log(error.message)
+      },
       () => {
         this.uploadValue4 = 100
         storageRef.snapshot.ref.getDownloadURL().then((url) => {
@@ -257,7 +378,9 @@ export default {
       const storageRef = firebase.storage().ref(`${this.imageData5.name}`).put(this.imageData5)
       storageRef.on(`state_changed`, (snapshot) => {
         this.uploadValue5 = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-      }, (error) => { console.log(error.message) },
+      }, (error) => {
+        console.log(error.message)
+      },
       () => {
         this.uploadValue5 = 100
         storageRef.snapshot.ref.getDownloadURL().then((url) => {
@@ -266,14 +389,34 @@ export default {
       }
       )
     },
+    onUpload6 () {
+      this.picture6 = null
+      const storageRef = firebase.storage().ref(`${this.imageData6.name}`).put(this.imageData6)
+      storageRef.on(`state_changed`, (snapshot) => {
+        this.uploadValue6 = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      }, (error) => {
+        console.log(error.message)
+      },
+      () => {
+        this.uploadValue6 = 100
+        storageRef.snapshot.ref.getDownloadURL().then((url) => {
+          this.picture6 = url
+        })
+      }
+      )
+    },
 
     writeToFirestore () {
       firebase.firestore().collection('levels').add({
-        assets: ['' + this.images[0], '' + this.images[1], '' + this.images[2], '' + this.images[3], '' + this.images[4]],
-        category: 'Nature',
-        id: 1,
-        name: 'Gamta',
-        question: 'Kodel ne?',
+        assets: ['' + this.picture1, '' + this.picture2, '' + this.picture3, '' + this.picture4, '' + this.picture5],
+        category: this.category,
+        categorylt: this.categorylt,
+        header: this.picture6,
+        id: Date.now(),
+        name: this.levelname,
+        namelt: this.levelnamelt,
+        question: this.question,
+        questionlt: this.questionlt,
         timestamp: new Date()
       })
     },
@@ -298,36 +441,6 @@ export default {
     },
     logout () {
       firebase.auth().signOut()
-    },
-    selectFile () {
-      this.$refs.uploadInput.click()
-    },
-    detectFiles (e) {
-      const fileList = e.target.files || e.dataTransfer.files
-      Array.from(Array(fileList.length).keys()).map((x) => {
-        this.upload(fileList[x])
-        console.log(fileList[x].name)
-        this.urlAddress.push(fileList[x].name)
-      })
-    },
-    upload (file) {
-      this.fileName = file.name
-      this.uploading = true
-      this.uploadTask = firebase.storage().ref('images/' + file.name).put(file)
-    },
-    deleteImage () {
-      firebase.storage()
-        .ref('images/' + this.fileName)
-        .delete()
-        .then(() => {
-          this.uploading = false
-          this.uploadEnd = false
-          this.downloadURL = ''
-        })
-        .catch((error) => {
-          console.error(`file delete error occured: ${error}`)
-        })
-      this.$refs.form.reset()
     }
   }
 }
