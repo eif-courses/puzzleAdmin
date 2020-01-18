@@ -30,50 +30,99 @@
     </div>
 
     <div>
-      <v-btn
-        @click.native="selectFile"
-        v-if="!uploadEnd && !uploading"
-      >
-        Upload a cover image
-        <v-icon
-          right
-          aria-hidden="true"
-        >
-          add_a_photo
-        </v-icon>
-      </v-btn>
-      <form ref="form">
-        <input
-          id="files"
-          ref="uploadInput"
-          :multiple="true"
-          @change="detectFiles($event)"
-          type="file"
-          name="file"
-          accept="image/*"
-        >
-      </form>
-      <v-progress-circular
-        v-if="uploading && !uploadEnd"
-        :size="100"
-        :width="15"
-        :rotate="360"
-        :value="progressUpload"
-        color="primary"
-      >
-        {{ progressUpload }}%
-      </v-progress-circular>
+      <div>
+        <p>Upload an image to Firebase:</p>
+        <input @change="previewImage1" type="file" accept="image/*">
+      </div>
+      <div>
+        <p>
+          Progress: {{ uploadValue1.toFixed()+"%" }}
+          <progress id="progress" :value="uploadValue1" max="100" />
+        </p>
+      </div>
+      <div v-if="imageData1!=null">
+        <img :src="picture1" class="preview">
+        <br>
+        <button @click="onUpload1">
+          Upload
+        </button>
+      </div>
+      <div>
+        <div>
+          <p>Upload an image to Firebase:</p>
+          <input @change="previewImage2" type="file" accept="image/*">
+        </div>
+        <div>
+          <p>
+            Progress: {{ uploadValue2.toFixed()+"%" }}
+            <progress id="progress" :value="uploadValue2" max="100" />
+          </p>
+        </div>
+        <div v-if="imageData2!=null">
+          <img :src="picture2" class="preview">
+          <br>
+          <button @click="onUpload2">
+            Upload
+          </button>
+        </div>
+      </div>
 
-      <div v-if="uploadEnd">
-        <v-btn
-          @click="deleteImage()"
-          class="ma-0"
-          dark
-          small
-          color="error"
-        >
-          Delete
-        </v-btn>
+      <div>
+        <div>
+          <p>Upload an image to Firebase:</p>
+          <input @change="previewImage3" type="file" accept="image/*">
+        </div>
+        <div>
+          <p>
+            Progress: {{ uploadValue3.toFixed()+"%" }}
+            <progress id="progress" :value="uploadValue3" max="100" />
+          </p>
+        </div>
+        <div v-if="imageData3!=null">
+          <img :src="picture3" class="preview">
+          <br>
+          <button @click="onUpload3">
+            Upload
+          </button>
+        </div>
+      </div>
+      <div>
+        <div>
+          <p>Upload an image to Firebase:</p>
+          <input @change="previewImage4" type="file" accept="image/*">
+        </div>
+        <div>
+          <p>
+            Progress: {{ uploadValue4.toFixed()+"%" }}
+            <progress id="progress" :value="uploadValue4" max="100" />
+          </p>
+        </div>
+        <div v-if="imageData4!=null">
+          <img :src="picture4" class="preview">
+          <br>
+          <button @click="onUpload4">
+            Upload
+          </button>
+        </div>
+      </div>
+      <div>
+        <div>
+          <p>Upload an image to Firebase:</p>
+          <input @change="previewImage5" type="file" accept="image/*">
+        </div>
+        <div>
+          <p>
+            Progress: {{ uploadValue5.toFixed()+"%" }}
+            <progress id="progress" :value="uploadValue5" max="100" />
+          </p>
+        </div>
+        <div v-if="imageData5!=null">
+          <img :src="picture5" class="preview">
+          <br>
+          <button @click="onUpload5">
+            Upload
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -86,13 +135,21 @@ export default {
   data () {
     return {
       ref: firebase.firestore().collection('levels'),
-      progressUpload: 0,
-      fileName: '',
-      uploadTask: '',
-      uploading: false,
-      uploadEnd: false,
-      downloadURL: '',
-      urlAddress: []
+      imageData1: null,
+      picture1: null,
+      uploadValue1: 0,
+      imageData2: null,
+      picture2: null,
+      uploadValue2: 0,
+      imageData3: null,
+      picture3: null,
+      uploadValue3: 0,
+      imageData4: null,
+      picture4: null,
+      uploadValue4: 0,
+      imageData5: null,
+      picture5: null,
+      uploadValue5: 0
     }
   },
   firestore () {
@@ -100,85 +157,125 @@ export default {
       levels: firebase.collection('levels')
     }
   },
-  watch: {
-    uploadTask () {
-      this.uploadTask.on('state_changed', (sp) => {
-        this.progressUpload = Math.floor(sp.bytesTransferred / sp.totalBytes * 100)
-      },
-      null,
-      () => {
-        this.uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-          this.uploadEnd = true
-          this.downloadURL = downloadURL
-          this.$emit('downloadURL', downloadURL)
-        })
-      })
-    }
-  },
+
   asyncData () {
-    const provincesArray = []
-    const housesArray = []
-
-    // await firebase.firestore()
-    //   .collection('levels')
-    //   .get()
-    //   .then((querySnapshot) => {
-    //     querySnapshot.forEach((doc) => {
-    //       provincesArray.push(doc.data())
-    //       console.log(doc.data())
-    //     })
-    //   })
-
-    // await firebase.firestore()
-    //   .collection('houses')
-    //   .where('valid_until', '>', date)
-    //   .get()
-    //   .then((querySnapshot) => {
-    //     querySnapshot.forEach((doc) => {
-    //       housesArray.push(doc.data())
-    //     })
-    //   })
-
     return {
       authenticatedUser: null,
       email: '',
       password: '',
       registrationPassword: '',
-      needsAccount: false,
-      provinces: provincesArray,
-      houses: housesArray
+      needsAccount: false
     }
   },
-
   created () {
     firebase.auth().onAuthStateChanged(user => (this.authenticatedUser = user))
   },
   methods: {
-
-    writeToFirestore () {
-      const temp = []
-      for (let i = 0; i < this.urlAddress.length; i++) {
-        const starsRef = firebase.storage().ref().child('images/' + this.urlAddress[i])
-        starsRef.getDownloadURL().then((url) => {
-          temp.push(url)
-          console.log(url)
-
-          localStorage.setItem('temp', temp)
-
-          return temp
-          // Insert url into an <img> tag to "download"
-        }).then((t) => {
-          const retrievedObject = localStorage.getItem('temp')
-          firebase.firestore().collection('levels').add({
-            assets: ['' + retrievedObject[0], '' + t[1], '' + t[2], '' + t[3], '' + t[4]],
-            category: 'Nature',
-            id: 1,
-            name: 'Gamta',
-            question: 'Kodel ne?',
-            timestamp: new Date()
-          })
+    previewImage1 (event) {
+      this.uploadValue1 = 0
+      this.picture1 = null
+      this.imageData1 = event.target.files[0]
+    },
+    previewImage2 (event) {
+      this.uploadValue2 = 0
+      this.picture2 = null
+      this.imageData2 = event.target.files[0]
+    },
+    previewImage3 (event) {
+      this.uploadValue3 = 0
+      this.picture3 = null
+      this.imageData3 = event.target.files[0]
+    },
+    previewImage4 (event) {
+      this.uploadValue4 = 0
+      this.picture4 = null
+      this.imageData4 = event.target.files[0]
+    },
+    previewImage5 (event) {
+      this.uploadValue5 = 0
+      this.picture5 = null
+      this.imageData5 = event.target.files[0]
+    },
+    onUpload1 () {
+      this.picture1 = null
+      const storageRef = firebase.storage().ref(`${this.imageData1.name}`).put(this.imageData1)
+      storageRef.on(`state_changed`, (snapshot) => {
+        this.uploadValue1 = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      }, (error) => { console.log(error.message) },
+      () => {
+        this.uploadValue1 = 100
+        storageRef.snapshot.ref.getDownloadURL().then((url) => {
+          this.picture = url
         })
       }
+      )
+    },
+    onUpload2 () {
+      this.picture2 = null
+      const storageRef = firebase.storage().ref(`${this.imageData2.name}`).put(this.imageData2)
+      storageRef.on(`state_changed`, (snapshot) => {
+        this.uploadValue2 = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      }, (error) => { console.log(error.message) },
+      () => {
+        this.uploadValue2 = 100
+        storageRef.snapshot.ref.getDownloadURL().then((url) => {
+          this.picture = url
+        })
+      }
+      )
+    },
+    onUpload3 () {
+      this.picture3 = null
+      const storageRef = firebase.storage().ref(`${this.imageData3.name}`).put(this.imageData3)
+      storageRef.on(`state_changed`, (snapshot) => {
+        this.uploadValue3 = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      }, (error) => { console.log(error.message) },
+      () => {
+        this.uploadValue3 = 100
+        storageRef.snapshot.ref.getDownloadURL().then((url) => {
+          this.picture = url
+        })
+      }
+      )
+    },
+    onUpload4 () {
+      this.picture4 = null
+      const storageRef = firebase.storage().ref(`${this.imageData4.name}`).put(this.imageData4)
+      storageRef.on(`state_changed`, (snapshot) => {
+        this.uploadValue4 = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      }, (error) => { console.log(error.message) },
+      () => {
+        this.uploadValue4 = 100
+        storageRef.snapshot.ref.getDownloadURL().then((url) => {
+          this.picture = url
+        })
+      }
+      )
+    },
+    onUpload5 () {
+      this.picture5 = null
+      const storageRef = firebase.storage().ref(`${this.imageData5.name}`).put(this.imageData5)
+      storageRef.on(`state_changed`, (snapshot) => {
+        this.uploadValue5 = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      }, (error) => { console.log(error.message) },
+      () => {
+        this.uploadValue5 = 100
+        storageRef.snapshot.ref.getDownloadURL().then((url) => {
+          this.picture = url
+        })
+      }
+      )
+    },
+
+    writeToFirestore () {
+      firebase.firestore().collection('levels').add({
+        assets: ['' + this.images[0], '' + this.images[1], '' + this.images[2], '' + this.images[3], '' + this.images[4]],
+        category: 'Nature',
+        id: 1,
+        name: 'Gamta',
+        question: 'Kodel ne?',
+        timestamp: new Date()
+      })
     },
     register () {
       // if (this.password === this.registrationPassword) {
@@ -236,11 +333,5 @@ export default {
 }
 </script>
 <style>
-  .progress-bar {
-    margin: 10px 0;
-  }
-  input[type="file"] {
-    position: absolute;
-    clip: rect(0,0,0,0);
-  }
+
 </style>
